@@ -8,7 +8,7 @@ interface CardProps {
 
 export const Card = ({ title, thumbnail }: CardProps) => {
   return (
-    <Box position="relative" border="1px solid red" w="100%">
+    <Box position="relative" w="100%">
       <Image
         src={thumbnail}
         alt=""

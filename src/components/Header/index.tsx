@@ -9,7 +9,10 @@ export const Header = () => {
       display="flex"
       alignItems="center"
       justifyContent="space-between"
-      py={4}
+      py={5}
+      borderBottom="1px solid"
+      borderColor="blue.100"
+      mb={10}
     >
       <Heading as="h1" color="blue.500" fontWeight="600" fontSize="2xl">
         SPACT

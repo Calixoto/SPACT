@@ -9,9 +9,19 @@ interface SectionMusicProps {
 export const SectionMusic = ({ title }: SectionMusicProps) => {
   return (
     <Stack>
-      <HStack align="center" justifyContent="space-between">
+      <HStack align="flex-end" justifyContent="space-between">
         <Heading>{title}</Heading>
-        <Link as={ReachLink} href="#">
+        <Link
+          as={ReachLink}
+          href="#"
+          color="blue.700"
+          fontWeight={700}
+          _hover={{
+            textDecoration: "none",
+            color: "blue.600",
+            letterSpacing: "0.1px",
+          }}
+        >
           Ver mais...
         </Link>
       </HStack>

@@ -14,9 +14,23 @@ export const theme = extendTheme({
   fonts,
   styles: {
     global: {
+      "*": {
+        margin: 0,
+        padding: 0,
+        boxSizing: "border-box",
+      },
+      html: {
+        height: "100%",
+        "@media (max-width: 1080px)": {
+          fontSize: "93.75%",
+        },
+        "@media (max-width: 720px)": {
+          fontSize: "87.5%",
+        },
+      },
       body: {
-        bg: "background",
-        color: "black.100",
+        bg: "blue.50",
+        color: "blue.900",
       },
     },
   },
