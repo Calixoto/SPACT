@@ -5,7 +5,10 @@ import { useMusic } from "../../hooks/useMusic";
 
 export const SearchMusic = () => {
   const musicSearchRef = useRef<HTMLInputElement>(null);
-  const { getMusic } = useMusic();
+  const { getMusic, handleActiveListening, transcript } = useMusic();
+
+  // musicSearchRef.current?.value ? musicSearchRef.current?.value =  : null
+
   return (
     <Flex align="center" flex={1} maxW="50%" gap={2} position="relative">
       <Input
@@ -42,6 +45,7 @@ export const SearchMusic = () => {
           bg: "blue.100",
           color: "blue.900",
         }}
+        onClick={handleActiveListening}
       >
         <FaMicrophone size={24} />
       </Button>

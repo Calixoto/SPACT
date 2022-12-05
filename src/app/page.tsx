@@ -1,6 +1,7 @@
 "use client";
 import { ChakraProvider, Container } from "@chakra-ui/react";
 import type { NextPage } from "next";
+import "regenerator-runtime/runtime";
 import { Header } from "../components/Header";
 import { SectionMusic } from "../components/SectionMusic";
 import { MusicContextProvider } from "../contexts/musicContext";
