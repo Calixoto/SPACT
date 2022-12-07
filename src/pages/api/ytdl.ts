@@ -1,6 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import ytdl from "ytdl-core";
+import fs from "fs";
+import aws from "./creatingAws";
 
 const reqOptions = {
   requestOptions: {
@@ -11,7 +13,7 @@ const reqOptions = {
   },
 };
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
@@ -27,7 +29,10 @@ export default function handler(
       }
       if (format === "mp3") {
         res.setHeader("content-type", "audio/mpeg");
-        ytdl(url, { format, filter: "audioonly" }).pipe(res);
+        const file = ytdl(url, { format, filter: "audioonly" });
+
+        await aws(file);
+        return res.send("Uploaded");
       }
     } catch (err) {
       console.log("error", err);

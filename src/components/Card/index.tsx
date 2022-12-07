@@ -15,13 +15,13 @@ export const Card = ({ title, thumbnail, videoId }: CardProps) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url: videoId, type: "mp3" }),
     };
-    await fetch("http://localhost:3000/api/ytdl", requestOptions)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const sizeInBytes = blob.size;
-        console.log("sizeInBytes", sizeInBytes);
-        download(blob, `${title}.mp3`, "audio/mpeg");
-      });
+    await fetch("http://localhost:3000/api/ytdl", requestOptions);
+    // .then((res) => res.blob())
+    // .then((blob) => {
+    //   const sizeInBytes = blob.size;
+    //   console.log("sizeInBytes", sizeInBytes);
+    //   download(blob, `${title}.mp3`, "audio/mpeg");
+    // });
   };
   return (
     <Box w="100%" h="239px" maxW="250px" bg="gray.50" p={3} borderRadius={16}>
