@@ -1,6 +1,7 @@
 import { Box, Button, Text } from "@chakra-ui/react";
 import download from "downloadjs";
 import Image from "next/image";
+import { useState } from "react";
 
 interface CardProps {
   thumbnail: string;
@@ -9,18 +10,24 @@ interface CardProps {
 }
 
 export const Card = ({ title, thumbnail, videoId }: CardProps) => {
+  const [downloading, setDownloading] = useState(false);
+
   const handleDownload = async () => {
+    setDownloading(true);
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url: videoId, type: "mp3" }),
     };
     await fetch("http://localhost:3000/api/ytdl", requestOptions)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const sizeInBytes = blob.size;
-        console.log("sizeInBytes", sizeInBytes);
-        download(blob, `${title}.mp3`, "audio/mpeg");
+      .then((res) => res.json())
+      .then(async (data) => {
+        await fetch(data.urlSigned)
+          .then((response) => response.blob())
+          .then((blob) => {
+            download(blob, `${title}.mp3`, "audio/mpeg");
+            setDownloading(false);
+          });
       });
   };
   return (
@@ -55,7 +62,9 @@ export const Card = ({ title, thumbnail, videoId }: CardProps) => {
       >
         {title}
       </Text>
-      <Button onClick={handleDownload}>download</Button>
+      <Button onClick={handleDownload} disabled={downloading}>
+        {downloading ? "Baixando" : "Download"}
+      </Button>
     </Box>
   );
 };

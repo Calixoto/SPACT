@@ -51,7 +51,7 @@ model Playlist_Music {
 
 model File {
   id        String    @id @default(uuid())
-  url       String
+  url       String?
   path      String
   playlist  Playlist?
   createdAt DateTime  @default(now())

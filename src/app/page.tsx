@@ -13,7 +13,7 @@ const Home: NextPage = () => {
       <ChakraProvider theme={theme}>
         <Header />
         <Container maxW="5xl">
-          <SectionMusic title="Músicas Favoritas" />
+          <SectionMusic title="Músicas encontradas" />
         </Container>
       </ChakraProvider>
     </MusicContextProvider>
