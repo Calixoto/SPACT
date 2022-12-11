@@ -12,37 +12,53 @@ const client = new S3Client({
   },
 });
 
-export default async function aws(
-  file: Readable,
-  Key: string
-): Promise<String> {
+interface Props {
+  file?: Readable;
+  Key?: string;
+  path?: string;
+}
+
+export default async function aws({ file, Key, path }: Props): Promise<String> {
   try {
-    const Body = new Stream.PassThrough();
-    file.pipe(Body);
-    const fileParams: PutObjectCommandInput = {
-      Bucket: process.env.NEXT_PUBLIC_BUCKET_NAME,
-      Key,
-      Body,
-      ContentType: "audio/mpeg",
-    };
+    if (path) {
+      const command = new GetObjectCommand({
+        Bucket: process.env.NEXT_PUBLIC_BUCKET_NAME,
+        Key: path,
+      });
 
-    const upload = new Upload({
-      client,
-      params: fileParams,
-    });
+      const url = await getSignedUrl(client, command, {
+        expiresIn: 3600,
+      });
 
-    await upload.done();
+      return url;
+    } else {
+      const Body = new Stream.PassThrough();
+      file?.pipe(Body);
+      const fileParams: PutObjectCommandInput = {
+        Bucket: process.env.NEXT_PUBLIC_BUCKET_NAME,
+        Key,
+        Body,
+        ContentType: "audio/mpeg",
+      };
 
-    const command = new GetObjectCommand({
-      Bucket: process.env.NEXT_PUBLIC_BUCKET_NAME,
-      Key,
-    });
+      const upload = new Upload({
+        client,
+        params: fileParams,
+      });
 
-    const url = await getSignedUrl(client, command, {
-      expiresIn: 3600,
-    });
+      await upload.done();
 
-    return url;
+      const command = new GetObjectCommand({
+        Bucket: process.env.NEXT_PUBLIC_BUCKET_NAME,
+        Key,
+      });
+
+      const url = await getSignedUrl(client, command, {
+        expiresIn: 3600,
+      });
+
+      return url;
+    }
   } catch (error) {
     return error as string;
   }

@@ -9,10 +9,10 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import { api } from "../services/api";
-import { MusciType } from "../types/musicTypes";
+import { MusicType } from "../types/musicTypes";
 
 interface MusicContextProps {
-  music: MusciType | null;
+  music: MusicType | null;
   getMusic: (q?: string) => void;
   transcript: string;
   handleActiveListening: () => Promise<void>;
@@ -21,7 +21,7 @@ interface MusicContextProps {
 export const MusicContext = createContext({} as MusicContextProps);
 
 export const MusicContextProvider = ({ children }: { children: ReactNode }) => {
-  const [music, setMusic] = useState<MusciType | null>(null);
+  const [music, setMusic] = useState<MusicType | null>(null);
   const getMusic = useCallback(async (q?: string) => {
     await api
       .get("/search", {
@@ -31,7 +31,6 @@ export const MusicContextProvider = ({ children }: { children: ReactNode }) => {
       })
       .then((res) => {
         setMusic(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.error(err));
   }, []);
