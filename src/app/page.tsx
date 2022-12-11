@@ -7,7 +7,7 @@ import { SectionMusic } from "../components/SectionMusic";
 import { MusicContextProvider } from "../contexts/musicContext";
 import { theme } from "../styles/theme";
 
-const Home: NextPage = () => {
+export default function Page() {
   return (
     <MusicContextProvider>
       <ChakraProvider theme={theme}>
@@ -18,6 +18,4 @@ const Home: NextPage = () => {
       </ChakraProvider>
     </MusicContextProvider>
   );
-};
-
-export default Home;
+}
