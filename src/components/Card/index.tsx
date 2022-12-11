@@ -17,9 +17,9 @@ export const Card = ({ title, thumbnail, videoId }: CardProps) => {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: videoId, type: "mp3" }),
+      body: JSON.stringify({ url: videoId, title, type: "mp3" }),
     };
-    await fetch("http://localhost:3000/api/ytdl", requestOptions)
+    await fetch("/api/ytdl", requestOptions)
       .then((res) => res.json())
       .then(async (data) => {
         await fetch(data.urlSigned)

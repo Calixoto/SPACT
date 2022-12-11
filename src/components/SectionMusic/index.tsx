@@ -1,5 +1,6 @@
-import { Heading, HStack, Link, Stack } from "@chakra-ui/react";
-import ReachLink from "next/link";
+import { Heading, HStack, Stack } from "@chakra-ui/react";
+import { useEffect } from "react";
+// import ReachLink from "next/link";
 import { useMusic } from "../../hooks/useMusic";
 import { Card } from "../Card";
 
@@ -9,11 +10,12 @@ interface SectionMusicProps {
 
 export const SectionMusic = ({ title }: SectionMusicProps) => {
   const { music } = useMusic();
+
   return (
     <Stack>
       <HStack align="flex-end" justifyContent="space-between">
         <Heading>{title}</Heading>
-        <Link
+        {/* <Link
           as={ReachLink}
           href="#"
           color="blue.700"
@@ -25,7 +27,7 @@ export const SectionMusic = ({ title }: SectionMusicProps) => {
           }}
         >
           Ver mais...
-        </Link>
+        </Link> */}
       </HStack>
       <HStack spacing={4}>
         {/* {[1, 2, 3, 4].map((item) => ( */}

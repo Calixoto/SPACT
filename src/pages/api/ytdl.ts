@@ -5,6 +5,9 @@ import aws from "./creatingAws";
 import { generateRandomString } from "../../utils/generateRandomString";
 
 import { connect } from "mqtt";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,24 +15,50 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const url = req.body.url;
-      const format = req.body.type;
-      const client = connect("mqtt://broker.hivemq.com:1883");
+      const { url, type: format } = req.body;
+
       if (!ytdl.validateID(url) && !ytdl.validateURL(url)) {
         return res
           .status(400)
           .json({ success: false, error: "No valid YouTube Id!" });
       }
-      if (format === "mp3") {
+
+      const video = await prisma.file.findFirst({
+        where: {
+          videoId: url,
+        },
+      });
+
+      const client = connect("mqtt://broker.hivemq.com:1883");
+
+      if (!video) {
+        if (format === "mp3") {
+          res.setHeader("content-type", "audio/mpeg");
+          const file = ytdl(url, { format, filter: "audioonly" });
+          const Key = `${generateRandomString(8)}.mp3`;
+          const urlSigned = await aws({ file, Key });
+          client.publish(
+            "spact/download",
+            `${req.headers.host}/api/getFileUrl?Key=${Key}`
+          );
+          await prisma.file.create({
+            data: {
+              videoId: url,
+              path: Key,
+            },
+          });
+          return res.send({ success: true, data: "Download done", urlSigned });
+        }
+      } else {
         res.setHeader("content-type", "audio/mpeg");
-        const file = ytdl(url, { format, filter: "audioonly" });
-        const Key = `${generateRandomString(8)}.mp3`;
-        const urlSigned = await aws(file, Key);
-        client.publish("spact/download", urlSigned as string);
-        return res.send({ success: true, data: "Upload done", urlSigned });
+        const urlSigned = await aws({ path: video.path });
+        const message = `${req.headers.host}/api/getFileUrl?Key=${video.path}`;
+        client.publish("spact/download", message);
+        return res.send({ success: true, data: "Get from bd done", urlSigned });
       }
     } catch (err) {
       console.log("error", err);
+      return res.status(500).send({ success: false, error: err });
     }
   }
 }
