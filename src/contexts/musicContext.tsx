@@ -16,12 +16,15 @@ interface MusicContextProps {
   getMusic: (q?: string) => void;
   transcript: string;
   handleActiveListening: () => Promise<void>;
+  listening: boolean;
+  searched: string;
 }
 
 export const MusicContext = createContext({} as MusicContextProps);
 
 export const MusicContextProvider = ({ children }: { children: ReactNode }) => {
   const [music, setMusic] = useState<MusicType | null>(null);
+  const [searched, setSearched] = useState("");
   const getMusic = useCallback(async (q?: string) => {
     await api
       .get("/search", {
@@ -32,7 +35,8 @@ export const MusicContextProvider = ({ children }: { children: ReactNode }) => {
       .then((res) => {
         setMusic(res.data);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => setSearched(q || ""));
   }, []);
 
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
@@ -60,6 +64,8 @@ export const MusicContextProvider = ({ children }: { children: ReactNode }) => {
     music,
     transcript,
     handleActiveListening,
+    listening,
+    searched,
   };
   return (
     <MusicContext.Provider value={provider}>{children}</MusicContext.Provider>

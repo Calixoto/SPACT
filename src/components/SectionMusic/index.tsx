@@ -1,5 +1,4 @@
 import { Heading, HStack, Stack } from "@chakra-ui/react";
-import { useEffect } from "react";
 // import ReachLink from "next/link";
 import { useMusic } from "../../hooks/useMusic";
 import { Card } from "../Card";
@@ -9,28 +8,20 @@ interface SectionMusicProps {
 }
 
 export const SectionMusic = ({ title }: SectionMusicProps) => {
-  const { music } = useMusic();
+  const { music, searched } = useMusic();
 
   return (
     <Stack>
       <HStack align="flex-end" justifyContent="space-between">
-        <Heading>{title}</Heading>
-        {/* <Link
-          as={ReachLink}
-          href="#"
-          color="blue.700"
-          fontWeight={700}
-          _hover={{
-            textDecoration: "none",
-            color: "blue.600",
-            letterSpacing: "0.1px",
-          }}
-        >
-          Ver mais...
-        </Link> */}
+        <Heading>{title + searched} </Heading>
       </HStack>
-      <HStack spacing={4}>
-        {/* {[1, 2, 3, 4].map((item) => ( */}
+      <HStack
+        spacing={4}
+        justifyContent={["center", "center", "space-between"]}
+        flexWrap="wrap"
+        alignItems="center"
+        gap={4}
+      >
         {music &&
           music.items.map((item) => (
             <Card
@@ -40,7 +31,6 @@ export const SectionMusic = ({ title }: SectionMusicProps) => {
               videoId={item.id.videoId}
             />
           ))}
-        {/* ))} */}
       </HStack>
     </Stack>
   );

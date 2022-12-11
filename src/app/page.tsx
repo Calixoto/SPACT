@@ -1,6 +1,5 @@
 "use client";
 import { ChakraProvider, Container } from "@chakra-ui/react";
-import type { NextPage } from "next";
 import "regenerator-runtime/runtime";
 import { Header } from "../components/Header";
 import { SectionMusic } from "../components/SectionMusic";
@@ -12,8 +11,8 @@ export default function Page() {
     <MusicContextProvider>
       <ChakraProvider theme={theme}>
         <Header />
-        <Container maxW="5xl">
-          <SectionMusic title="Músicas encontradas" />
+        <Container maxW="6xl">
+          <SectionMusic title="Voce pesquisou por: " />
         </Container>
       </ChakraProvider>
     </MusicContextProvider>

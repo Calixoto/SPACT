@@ -5,7 +5,7 @@ import { useMusic } from "../../hooks/useMusic";
 
 export const SearchMusic = () => {
   const musicSearchRef = useRef<HTMLInputElement>(null);
-  const { getMusic, handleActiveListening, transcript } = useMusic();
+  const { getMusic, handleActiveListening, listening } = useMusic();
 
   // musicSearchRef.current?.value ? musicSearchRef.current?.value =  : null
 
@@ -47,7 +47,7 @@ export const SearchMusic = () => {
         }}
         onClick={handleActiveListening}
       >
-        <FaMicrophone size={24} />
+        <FaMicrophone size={24} color={listening ? "#ff0000" : undefined} />
       </Button>
     </Flex>
   );

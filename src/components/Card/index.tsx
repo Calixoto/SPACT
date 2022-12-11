@@ -1,4 +1,4 @@
-import { Box, Button, Text } from "@chakra-ui/react";
+import { Box, Spinner, Text } from "@chakra-ui/react";
 import download from "downloadjs";
 import Image from "next/image";
 import { useState } from "react";
@@ -31,7 +31,19 @@ export const Card = ({ title, thumbnail, videoId }: CardProps) => {
       });
   };
   return (
-    <Box w="100%" h="239px" maxW="250px" bg="gray.50" p={3} borderRadius={16}>
+    <Box
+      as={"button"}
+      onClick={handleDownload}
+      disabled={downloading}
+      alignItems="flex-start"
+      cursor="pointer"
+      w="100%"
+      h="269px"
+      maxW="250px"
+      bg="gray.50"
+      p={3}
+      borderRadius={16}
+    >
       <Image
         src={thumbnail}
         alt=""
@@ -62,9 +74,8 @@ export const Card = ({ title, thumbnail, videoId }: CardProps) => {
       >
         {title}
       </Text>
-      <Button onClick={handleDownload} disabled={downloading}>
-        {downloading ? "Baixando" : "Download"}
-      </Button>
+
+      {downloading && <Spinner display="flex" mx="auto" />}
     </Box>
   );
 };
