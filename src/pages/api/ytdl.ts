@@ -37,10 +37,7 @@ export default async function handler(
           const file = ytdl(url, { format, filter: "audioonly" });
           const Key = `${generateRandomString(8)}.mp3`;
           const urlSigned = await aws({ file, Key });
-          client.publish(
-            "spact/download",
-            `${req.headers.host}/api/getFileUrl?Key=${Key}`
-          );
+          client.publish("spact/download", Key);
           await prisma.file.create({
             data: {
               videoId: url,
@@ -52,8 +49,7 @@ export default async function handler(
       } else {
         res.setHeader("content-type", "audio/mpeg");
         const urlSigned = await aws({ path: video.path });
-        const message = `${req.headers.host}/api/getFileUrl?Key=${video.path}`;
-        client.publish("spact/download", message);
+        client.publish("spact/download", video.path);
         return res.send({ success: true, data: "Get from bd done", urlSigned });
       }
     } catch (err) {
